@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>ADBOARD — 1000 мест для рекламы</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#070707;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{min-height:100vh;overflow-x:hidden}
+button,input{font:inherit}
+.wrap{max-width:1100px;margin:auto;padding:18px}
+.hero{text-align:center;padding:42px 10px 28px}
+.badge{display:inline-block;border:1px solid #333;border-radius:999px;padding:7px 12px;font-size:12px;color:#aaa;margin-bottom:18px}
+h1{font-size:clamp(42px,11vw,88px);line-height:.9;letter-spacing:-4px;margin:0 0 18px}
+h1 span{color:#ffd400}
+.hero p{max-width:600px;margin:0 auto;color:#999;font-size:16px;line-height:1.5}
+.counter{margin:28px auto 20px;max-width:650px;border:1px solid #292929;border-radius:20px;padding:18px;background:#0d0d0d}
+.counterTop{display:flex;justify-content:space-between;font-size:13px;color:#aaa;margin-bottom:10px}
+.progress{height:9px;background:#242424;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:78.3%;background:#ffd400}
+.cta{display:inline-flex;border:0;background:#ffd400;color:#000;font-weight:800;padding:15px 22px;border-radius:13px;cursor:pointer;margin-top:18px}
+.sectionTitle{display:flex;justify-content:space-between;align-items:end;margin:30px 0 12px}
+.sectionTitle h2{margin:0;font-size:24px}
+.sectionTitle small{color:#777}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}
+.ad{position:relative;aspect-ratio:1;border:1px solid #292929;border-radius:9px;background:#101010;overflow:hidden;cursor:pointer;transition:.2s}
+.ad:hover{transform:translateY(-2px);border-color:#555}
+.ad img{width:100%;height:100%;object-fit:cover;display:block}
+.ad .empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#555;font-size:10px;text-align:center;padding:5px}
+.ad .num{position:absolute;bottom:4px;left:5px;background:#000b;color:#aaa;font-size:8px;border-radius:4px;padding:2px 4px}
+.featured{grid-column:span 2;grid-row:span 2}
+.demo1{background:linear-gradient(135deg,#ff4d4d,#7c2cff)!important}
+.demo2{background:linear-gradient(135deg,#00d4ff,#0055ff)!important}
+.demo3{background:linear-gradient(135deg,#00e676,#087f5b)!important}
+.demo4{background:linear-gradient(135deg,#ff9f00,#ff2d55)!important}
+.demoText{height:100%;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:900;padding:8px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}
+.card{background:#0d0d0d;border:1px solid #252525;border-radius:16px;padding:18px}
+.card b{font-size:28px;color:#ffd400}
+.card h3{margin:10px 0 5px}
+.card p{margin:0;color:#888;font-size:13px;line-height:1.45}
+footer{text-align:center;color:#555;font-size:12px;padding:45px 0 25px}
+.modal{display:none;position:fixed;inset:0;background:#000b;backdrop-filter:blur(8px);z-index:20;padding:15px;align-items:center;justify-content:center}
+.modal.show{display:flex}
+.box{width:min(440px,100%);background:#111;border:1px solid #333;border-radius:22px;padding:22px}
+.box h2{margin:0 0 6px}
+.box p{color:#888;font-size:13px;margin:0 0 18px}
+label{display:block;color:#aaa;font-size:12px;margin:12px 0 6px}
+input{width:100%;background:#080808;color:#fff;border:1px solid #333;border-radius:11px;padding:13px;outline:none}
+input:focus{border-color:#ffd400}
+.actions{display:flex;gap:8px;margin-top:18px}
+.actions button{flex:1;padding:13px;border-radius:11px;border:1px solid #333;background:#191919;color:#fff;cursor:pointer}
+.actions .buy{background:#ffd400;color:#000;border:0;font-weight:800}
+.price{font-size:28px;font-weight:900;color:#ffd400}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(100px);background:#fff;color:#000;padding:12px 17px;border-radius:12px;font-weight:700;font-size:13px;transition:.3s;z-index:40}
+.toast.show{transform:translateX(-50%) translateY(0)}
+@media(max-width:700px){
+ .wrap{padding:12px}
+ .hero{padding-top:28px}
+ h1{letter-spacing:-2.5px}
+ .grid{grid-template-columns:repeat(4,1fr);gap:5px}
+ .featured{grid-column:span 2;grid-row:span 2}
+ .how{grid-template-columns:1fr}
+ .sectionTitle h2{font-size:20px}
+}
+@media(max-width:430px){
+ .grid{grid-template-columns:repeat(3,1fr)}
+ .featured{grid-column:span 2;grid-row:span 2}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="badge">THE SIMPLEST AD MARKET ON THE INTERNET</div>
+    <h1>1000<br><span>AD SPOTS.</span></h1>
+    <p>Одна страница. 1000 рекламных мест. Купи место — размести свою рекламу на месяц.</p>
+    <div class="counter">
+      <div class="counterTop"><span><b id="sold">783</b> / 1000 мест занято</span><span>$10 / месяц</span></div>
+      <div class="progress"><i id="bar"></i></div>
+      <button class="cta" onclick="openBuy(784)">ЗАНЯТЬ МЕСТО — $10</button>
+    </div>
+  </header>
+
+  <div class="sectionTitle">
+    <h2>Рекламная доска</h2><small>Нажми на свободное место</small>
+  </div>
+
+  <main class="grid" id="grid"></main>
+
+  <div class="sectionTitle"><h2>Как это работает</h2></div>
+  <section class="how">
+    <div class="card"><b>01</b><h3>Выбираешь место</h3><p>Любой свободный квадрат на общей рекламной доске.</p></div>
+    <div class="card"><b>02</b><h3>Добавляешь рекламу</h3><p>Название, картинка и ссылка на твой сайт или соцсеть.</p></div>
+    <div class="card"><b>03</b><h3>Получаешь трафик</h3><p>Реклама находится на одной публичной странице весь оплаченный месяц.</p></div>
+  </section>
+
+  <footer>ADBOARD © 2026 · Demo MVP · Платежи в этой версии не подключены</footer>
+</div>
+
+<div class="modal" id="modal">
+ <div class="box">
+   <h2>Занять место <span id="slot"></span></h2>
+   <p>В демо цена фиксирована. В реальном проекте сюда подключается Stripe / криптооплата.</p>
+   <div class="price">$10 / месяц</div>
+   <label>Название</label><input id="name" placeholder="Например: BOTLAB">
+   <label>Ссылка</label><input id="url" placeholder="https://...">
+   <label>Текст на рекламе</label><input id="text" placeholder="Создаём сайты и Telegram-ботов">
+   <div class="actions">
+     <button onclick="closeBuy()">Отмена</button>
+     <button class="buy" onclick="demoBuy()">Оплатить $10</button>
+   </div>
+ </div>
+</div>
+<div class="toast" id="toast">Готово</div>
+
+<script>
+const grid=document.getElementById('grid');
+const demoAds=[
+ ['demo1','YOUR BRAND','https://example.com'],
+ ['demo2','NEW APP','https://example.com'],
+ ['demo3','OPEN TODAY','https://example.com'],
+ ['demo4','BUY / SELL','https://example.com']
+];
+for(let n=1;n<=100;n++){
+ const a=document.createElement('div');
+ a.className='ad'+(n===1?' featured':'');
+ a.dataset.slot=n;
+ if(n<=4){
+   const d=demoAds[n-1];
+   a.classList.add(d[0]);
+   a.innerHTML='<div class="demoText">'+d[1]+'</div><div class="num">#'+String(n).padStart(4,'0')+'</div>';
+ }else{
+   a.innerHTML='<div class="empty">СВОБОДНО<br>$10</div><div class="num">#'+String(n).padStart(4,'0')+'</div>';
+   a.onclick=()=>openBuy(n);
+ }
+ grid.appendChild(a);
+}
+let selected=784;
+function openBuy(n){
+ selected=n;
+ document.getElementById('slot').textContent='#'+String(n).padStart(4,'0');
+ document.getElementById('modal').classList.add('show');
+}
+function closeBuy(){document.getElementById('modal').classList.remove('show')}
+function demoBuy(){
+ const name=document.getElementById('name').value.trim();
+ const url=document.getElementById('url').value.trim();
+ const text=document.getElementById('text').value.trim();
+ if(!name||!url){showToast('Заполни название и ссылку');return}
+ const card=document.querySelector('[data-slot="'+selected+'"]');
+ card.innerHTML='<div class="demoText">'+(text||name)+'</div><div class="num">#'+String(selected).padStart(4,'0')+'</div>';
+ card.style.background='linear-gradient(135deg,#ffd400,#ff7a00)';
+ card.onclick=()=>window.open(url,'_blank');
+ closeBuy();showToast('Демо: место занято!');
+}
+function showToast(t){
+ const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');
+ setTimeout(()=>x.classList.remove('show'),2200);
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeBuy()});
+</script>
+</body>
+</html>
